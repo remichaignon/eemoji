@@ -1,0 +1,41 @@
+<html>
+<head></head>
+<body>
+<script>
+	// 1. Emoticons ( 1F601 - 1F64F )
+	var regexEmoticons = ;
+	// 2. Dingbats ( 2702 - 27B0 )
+	var regexDingbats = ;
+	// 3. Transport and map symbols ( 1F680 - 1F6C0 )
+	var regexTransportAndMapSymbols = ;
+	// 4. Enclosed characters ( 24C2 - 1F251 )
+	var regexEnclosedCharacters = ;
+	// 5. Uncategorized
+	var regexUncategorized = ;
+	// 6a. Additional emoticons ( 1F600 - 1F636 )
+	var regexAdditionalEmoticons = ;
+	// 6b. Additional transport and map symbols ( 1F681 - 1F6C5 )
+	var regexAdditionalTransportAndMapSymbols = ;
+	// 6c. Other additional symbols ( 1F30D - 1F567 )
+	var regexOtherAdditionalSymbols = ;
+	
+	var regexEmoji = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+	
+	var regexExtendedEmoji = /[\uD800-\uDBFF][\uDC00-\uDFFF][\uD800-\uDBFF][\uDC00-\uDFFF]/g;
+	
+	var extendEmoji = function (str) {
+		console.log("FROM: " + str);
+		var arr;
+		var newStr = "";
+		var index = 0;
+		while ((arr = regexExtendedEmoji.exec(str)) !== null) {
+			newStr += str.substring(index, arr.index) + "\uD83D\uDCA9";
+			index = regexExtendedEmoji.lastIndex;
+		}
+		newStr += str.substr(index);
+		console.log("TO: " + newStr);
+		return newStr;
+	};
+</script>
+</body>
+</html>
