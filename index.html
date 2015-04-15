@@ -2,7 +2,7 @@
 <head></head>
 <body>
 <script>
-	// 1. Emoticons ( 1F601 - 1F64F )
+/* 	// 1. Emoticons ( 1F601 - 1F64F )
 	var regexEmoticons = ;
 	// 2. Dingbats ( 2702 - 27B0 )
 	var regexDingbats = ;
@@ -18,7 +18,7 @@
 	var regexAdditionalTransportAndMapSymbols = ;
 	// 6c. Other additional symbols ( 1F30D - 1F567 )
 	var regexOtherAdditionalSymbols = ;
-	
+	 */
 	var regexEmoji = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
 	
 	var regexExtendedEmoji = /[\uD800-\uDBFF][\uDC00-\uDFFF][\uD800-\uDBFF][\uDC00-\uDFFF]/g;
@@ -36,6 +36,18 @@
 		console.log("TO: " + newStr);
 		return newStr;
 	};
+	window.onload = function () {
+	var input = document.getElementById("input");
+	var submit = document.getElementById("submit");
+	var result = document.getElementById("result");
+
+	submit.addEventListener("click", function (event) {
+		result.innerHTML = extendEmoji(input.value);
+	});
+	};
 </script>
+<input id="input" type="text">
+<input id="submit" type="submit">
+<div id="result"></div>
 </body>
 </html>
