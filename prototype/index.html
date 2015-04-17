@@ -36,8 +36,33 @@
 	// 6c. Other additional symbols ( 1F30D - 1F567 )
 	var regexOtherAdditionalSymbols = ;
 */
-	var regexEmoji = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
 	
+// Polyfill Array.prototype.find()
+if (!Array.prototype.find) {
+  Array.prototype.find = function(predicate) {
+    if (this == null) {
+      throw new TypeError('Array.prototype.find called on null or undefined');
+    }
+    if (typeof predicate !== 'function') {
+      throw new TypeError('predicate must be a function');
+    }
+    var list = Object(this);
+    var length = list.length >>> 0;
+    var thisArg = arguments[1];
+    var value;
+
+    for (var i = 0; i < length; i++) {
+      value = list[i];
+      if (predicate.call(thisArg, value, i, list)) {
+        return value;
+      }
+    }
+    return undefined;
+  };
+}
+	
+	var rules = [];
+	var regexEmoji = /[\uD800-\uDBFF][\uDC00-\uDFFF]/g;
 	var regexExtendedEmoji = /[\uD800-\uDBFF][\uDC00-\uDFFF][\uD800-\uDBFF][\uDC00-\uDFFF]/g;
 	
 	var extendEmoji = function (str) {
@@ -46,9 +71,18 @@
 		var newStr = "";
 		var index = 0;
 		while ((arr = regexExtendedEmoji.exec(str)) !== null) {
-			debugger;
 			var c = "ee-" + arr[0].codePointAt(0).toString(16) + "-" + arr[0].codePointAt(2).toString(16);
-			newStr += str.substring(index, arr.index) + "<div class=\"emoji " + c + "\"></div>";
+			
+			var found = rules.find(function (element) {
+				return element === c;
+			});
+
+			if (found) {
+				newStr += str.substring(index, arr.index) + "<div class=\"emoji " + c + "\"></div>";
+			}
+			else {
+				newStr += arr[0];
+			}
 			index = regexExtendedEmoji.lastIndex;
 		}
 		newStr += str.substr(index);
@@ -57,6 +91,8 @@
 	};
 
 	window.onload = function () {
+		for (var i = 0; i < document.styleSheets[0].rules.length; i++) { rules.push(document.styleSheets[0].rules[i].selectorText.slice(1)); }
+	
 		var input = document.getElementById("input");
 		var submit = document.getElementById("submit");
 		var result = document.getElementById("result");
